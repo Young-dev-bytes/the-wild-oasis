@@ -19,7 +19,8 @@ import AppLayout from "../ui/AppLayout";
 
 /**
  * <AppLayout /> 组件在这种情况下将在其父级路由组件（你的第一个 <Route>）加载时渲染，
- * 因为它是该路由的 element 属性。这意味着，只要匹配到了该路由（在这种情况下，是 / 路径），
+ * 因为它是该路由的 element 属性。这意味着，只要匹配到了该路由（在这种情况下，是 / 路径），ppp
+ 
  * <AppLayout /> 就会加载。
  */
 const routerElements = createBrowserRouter(
