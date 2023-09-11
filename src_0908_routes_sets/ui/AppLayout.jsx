@@ -3,8 +3,6 @@ import { Outlet, useLoaderData } from "react-router-dom";
 
 function AppLayout() {
   console.log("applayout");
-  const loader = useLoaderData();
-  console.log("applayout-loader", loader);
 
   useEffect(() => {
     console.log("applayout effect");
