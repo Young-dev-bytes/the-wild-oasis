@@ -56,21 +56,20 @@ function CabinRow({ cabin }) {
   const queryClient = useQueryClient();
 
   // ! first
-  const mutationT = useMutation({
-    mutationFn: async (cabinId) => {
-      await deleteCabin(cabinId);
-    },
-    onSuccess: () => {
-      console.log("onSuccess");
-      queryClient.invalidateQueries({
-        queryKey: ["cabins"],
-      });
-    },
-    onError: (err) => {
-      console.log("err", err);
-    },
-  });
-  console.log("mutationT", mutationT);
+  // const mutationT = useMutation({
+  //   mutationFn: async (cabinId) => {
+  //     await deleteCabin(cabinId);
+  //   },
+  //   onSuccess: () => {
+  //     console.log("onSuccess");
+  //     queryClient.invalidateQueries({
+  //       queryKey: ["cabins"],
+  //     });
+  //   },
+  //   onError: (err) => {
+  //     console.log("err", err);
+  //   },
+  // });
 
   // ! second
   const mutation = useMutation({
@@ -86,7 +85,6 @@ function CabinRow({ cabin }) {
       toast.error(err.message);
     },
   });
-  console.log("mutation", mutation);
   const { isLoading: isDeleting, mutate } = mutation;
 
   return (
@@ -97,6 +95,7 @@ function CabinRow({ cabin }) {
       <Price>{formatCurrency(regularPrice)}</Price>
       <Discount>{formatCurrency(discount)}</Discount>
       <button
+        disabled={isDeleting}
         onClick={() => {
           mutate(cabinId);
         }}
