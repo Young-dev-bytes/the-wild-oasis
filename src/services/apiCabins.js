@@ -1,4 +1,4 @@
-import supabase from "./supabase";
+import supabase, { supabaseUrl } from "./supabase";
 
 export async function getCabins() {
   const { data, error } = await supabase
@@ -13,13 +13,31 @@ export async function getCabins() {
 }
 
 export async function createCabin(newCabin) {
+  //https://jqeypqtmrfhfuxnwrqng.supabase.co/storage/v1/object/public/cabin-images/cabin-002.jpg
+  const imageName = `${Math.random()}-${newCabin.image.name}`.replaceAll(
+    "/",
+    ""
+  );
+  const imagePath = `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`;
+
   const { data, error } = await supabase
     .from("cabins")
-    .insert([newCabin])
+    .insert([{ ...newCabin, image: imagePath }])
     .select();
   if (error) {
     throw new Error(`Cabin could not be created`);
   }
+
+  // upload a image
+
+  // const avatarFile = event.target.files[0]
+  // const { data, error } = await supabase
+  //   .storage
+  //   .from('avatars')
+  //   .upload('public/avatar1.png', avatarFile, {
+  //     cacheControl: '3600',
+  //     upsert: false
+  //   })
 
   return data;
 }
