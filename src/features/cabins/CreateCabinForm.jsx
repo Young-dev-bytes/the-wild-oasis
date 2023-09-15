@@ -9,12 +9,11 @@ import FormRow from "../../ui/FormRow";
 import useCreateCabin from "./useCreateCabin";
 import useUpdateCabin from "./useUpdateCabin";
 
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
   console.log("cabinToEdit", cabinToEdit);
   const { isCreating, createCabin } = useCreateCabin();
   const { isEditing, editCabin } = useUpdateCabin();
   const isWorking = isCreating || isEditing;
-
   const { id: editId, ...editValues } = cabinToEdit;
   const isEditSession = Boolean(editId);
   const {
@@ -36,6 +35,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         {
           onSuccess: () => {
             reset();
+            onCloseModal?.();
           },
         }
       );
@@ -45,6 +45,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         {
           onSuccess: () => {
             reset();
+            onCloseModal?.();
           },
         }
       );
@@ -55,12 +56,16 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit, onError)}
+      type={onCloseModal ? "modal" : "regular"}
+    >
       <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
           {...register("name", {
             required: "This field is required",
           })}
+          disabled={isWorking}
           type="text"
           id="name"
         />
@@ -142,7 +147,15 @@ function CreateCabinForm({ cabinToEdit = {} }) {
       </FormRow>
 
       <FormRow>
-        <Button $variation="secondary" disabled={isWorking} type="reset">
+        <Button
+          $variation="secondary"
+          disabled={isWorking}
+          type="reset"
+          // onClick={() => onCloseModal?.()}
+          onClick={() => {
+            return onCloseModal?.();
+          }}
+        >
           Cancel
         </Button>
         <Button disabled={isWorking}>

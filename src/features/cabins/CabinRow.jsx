@@ -5,6 +5,7 @@ import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
 import styled from "styled-components";
 import CreateCabinForm from "./CreateCabinForm";
 import useCreateCabin from "./useCreateCabin";
+import Modal from "../../ui/Modal";
 
 const TableRow = styled.div`
   display: grid;
@@ -55,14 +56,14 @@ function CabinRow({ cabin }) {
     image,
     description,
   } = cabin;
-  const [showForm, setShowForm] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const { isDeleting, deleteCabin } = useDeleteCabin();
   const { isCreating, createCabin } = useCreateCabin();
   const isWorking = isDeleting || isCreating;
 
   const handleDuplicate = () => {
     createCabin({
-      name: `Copy of ${name}`,
+      name: `${name} copy`,
       maxCapacity,
       regularPrice,
       discount,
@@ -73,13 +74,19 @@ function CabinRow({ cabin }) {
   const handleDeleteCabin = () => {
     deleteCabin(cabinId);
   };
+  const handleOnCloseModal = () => {
+    setIsOpenModal(false);
+  };
 
   return (
     <>
       <TableRow>
         <Img src={image}></Img>
         <Cabin>{name}</Cabin>
-        <div>Fits up to {maxCapacity}</div>
+        <div>
+          Fits up to <span style={{ fontWeight: "bold" }}>{maxCapacity}</span>{" "}
+          guests
+        </div>
         <Price>{formatCurrency(regularPrice)}</Price>
         <Discount>
           {discount ? formatCurrency(discount) : <span>&mdash;</span>}
@@ -88,7 +95,7 @@ function CabinRow({ cabin }) {
           <button disabled={isWorking} onClick={handleDuplicate}>
             <HiSquare2Stack />
           </button>
-          <button onClick={() => setShowForm((showForm) => !showForm)}>
+          <button onClick={() => setIsOpenModal((open) => !open)}>
             <HiPencil />
           </button>
 
@@ -98,7 +105,14 @@ function CabinRow({ cabin }) {
           </button>
         </div>
       </TableRow>
-      {showForm && <CreateCabinForm cabinToEdit={cabin} />}
+      {isOpenModal && (
+        <Modal onCloseModal={handleOnCloseModal}>
+          <CreateCabinForm
+            cabinToEdit={cabin}
+            onCloseModal={handleOnCloseModal}
+          />
+        </Modal>
+      )}
     </>
   );
 }
