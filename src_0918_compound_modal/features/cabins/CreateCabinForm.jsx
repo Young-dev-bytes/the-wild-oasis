@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
 
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
@@ -9,9 +8,10 @@ import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
 import useCreateCabin from "./useCreateCabin";
 import useUpdateCabin from "./useUpdateCabin";
+import { HiXMark } from "react-icons/hi2";
 
 function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
-  console.log("createcabinform");
+  console.log("cabinToEdit", cabinToEdit);
   const { isCreating, createCabin } = useCreateCabin();
   const { isEditing, editCabin } = useUpdateCabin();
   const isWorking = isCreating || isEditing;
@@ -55,10 +55,6 @@ function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
   const onError = (errors) => {
     console.log("errors", errors);
   };
-
-  useEffect(() => {
-    console.log("createcabinform effect");
-  }, []);
 
   return (
     <Form

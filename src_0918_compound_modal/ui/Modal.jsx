@@ -1,15 +1,7 @@
-import {
-  cloneElement,
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { cloneElement, createContext, useContext, useState } from "react";
 import { createPortal } from "react-dom";
 import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
-import useOutSideClick from "../hooks/useOutSideClick";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -63,14 +55,10 @@ const Button = styled.button`
 const ModalContext = createContext();
 
 function Modal({ children }) {
-  console.log("modal");
+  console.log("modal-children", children);
   const [openName, setOpenName] = useState("");
   const close = () => setOpenName("");
   const open = setOpenName;
-
-  useEffect(() => {
-    console.log("modal effect");
-  }, []);
   return (
     <ModalContext.Provider value={{ openName, open, close }}>
       {children}
@@ -79,12 +67,9 @@ function Modal({ children }) {
 }
 
 export function Open({ children, opens: opensWindowName }) {
-  console.log("open");
+  console.log("open-children", children);
+  console.log("opensWindowName", opensWindowName);
   const { open } = useContext(ModalContext);
-
-  useEffect(() => {
-    console.log("open effect");
-  }, []);
 
   // clone children(button), and add onClick event on it, so it will be trigered when click
   return cloneElement(children, {
@@ -95,19 +80,12 @@ export function Open({ children, opens: opensWindowName }) {
 }
 
 export function Window({ children, name }) {
-  console.log("window");
+  console.log("window-children", children);
   const { openName, close } = useContext(ModalContext);
-
-  const ref = useOutSideClick(close);
-
-  useEffect(() => {
-    console.log("window effect");
-  }, []);
-
   if (name !== openName) return null;
   return createPortal(
     <Overlay>
-      <StyledModal ref={ref}>
+      <StyledModal>
         <Button onClick={close}>
           <HiXMark />
         </Button>
