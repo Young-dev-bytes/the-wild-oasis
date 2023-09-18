@@ -1,11 +1,11 @@
 import { formatCurrency } from "../../utils/helpers";
+import { useState } from "react";
 import { useDeleteCabin } from "./useDeleteCabin";
 import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
 import styled from "styled-components";
 import CreateCabinForm from "./CreateCabinForm";
 import useCreateCabin from "./useCreateCabin";
-import Modal, { Open, Window } from "../../ui/Modal";
-import ConfirmDelete from "../../ui/ConfirmDelete";
+import Modal from "../../ui/Modal-1";
 
 const TableRow = styled.div`
   display: grid;
@@ -56,6 +56,7 @@ function CabinRow({ cabin }) {
     image,
     description,
   } = cabin;
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const { isDeleting, deleteCabin } = useDeleteCabin();
   const { isCreating, createCabin } = useCreateCabin();
   const isWorking = isDeleting || isCreating;
@@ -72,6 +73,9 @@ function CabinRow({ cabin }) {
   };
   const handleDeleteCabin = () => {
     deleteCabin(cabinId);
+  };
+  const handleOnCloseModal = () => {
+    setIsOpenModal(false);
   };
 
   return (
@@ -92,32 +96,24 @@ function CabinRow({ cabin }) {
             <HiSquare2Stack />
           </button>
 
-          <Modal>
-            <Open opens="edit">
-              <button>
-                <HiPencil />
-              </button>
-            </Open>
-            <Window name="edit">
-              <CreateCabinForm cabinToEdit={cabin} />
-            </Window>
+          <button onClick={() => setIsOpenModal((open) => !open)}>
+            <HiPencil />
+          </button>
 
-            <Open opens="delete">
-              <button>
-                {/* {isDeleting ? "deleting..." : "delete"} */}
-                <HiTrash />
-              </button>
-            </Open>
-            <Window name="delete">
-              <ConfirmDelete
-                resourceName={name}
-                disabled={isWorking}
-                onConfirm={handleDeleteCabin}
-              />
-            </Window>
-          </Modal>
+          <button disabled={isWorking} onClick={handleDeleteCabin}>
+            {/* {isDeleting ? "deleting..." : "delete"} */}
+            <HiTrash />
+          </button>
         </div>
       </TableRow>
+      {isOpenModal && (
+        <Modal onCloseModal={handleOnCloseModal}>
+          <CreateCabinForm
+            cabinToEdit={cabin}
+            onCloseModal={handleOnCloseModal}
+          />
+        </Modal>
+      )}
     </>
   );
 }

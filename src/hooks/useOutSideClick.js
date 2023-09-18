@@ -9,9 +9,6 @@ function useOutSideClick(handler, listenCapturing = true) {
 
   useEffect(() => {
     const handleClick = (e) => {
-      console.log("handleClick", ref.current.contains(e.target));
-
-      console.log("e", e.target);
       if (ref.current && !ref.current.contains(e.target)) {
         console.log("not contains");
         handler();

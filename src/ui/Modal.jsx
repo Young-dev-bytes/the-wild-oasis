@@ -3,7 +3,6 @@ import {
   createContext,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import { createPortal } from "react-dom";
@@ -80,6 +79,7 @@ function Modal({ children }) {
 
 export function Open({ children, opens: opensWindowName }) {
   console.log("open");
+  console.log("opensWindowName", opensWindowName);
   const { open } = useContext(ModalContext);
 
   useEffect(() => {
@@ -103,6 +103,8 @@ export function Window({ children, name }) {
   useEffect(() => {
     console.log("window effect");
   }, []);
+
+  console.log("name", name, "openName", openName);
 
   if (name !== openName) return null;
   return createPortal(
