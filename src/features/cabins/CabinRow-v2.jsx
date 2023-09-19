@@ -90,31 +90,26 @@ function CabinRow({ cabin }) {
           {discount ? formatCurrency(discount) : <span>&mdash;</span>}
         </Discount>
         <div>
+          <button disabled={isWorking} onClick={handleDuplicate}>
+            <HiSquare2Stack />
+          </button>
+
           <Modal>
-            <Menus.Menu>
-              <Menus.Toggle id={cabinId} />
-              <Menus.List id={cabinId}>
-                <Menus.Button
-                  icon={<HiSquare2Stack />}
-                  onClick={handleDuplicate}
-                >
-                  Duplicate
-                </Menus.Button>
-
-                <Open opens="edit">
-                  <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
-                </Open>
-
-                <Open opens="delete">
-                  <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
-                </Open>
-              </Menus.List>
-            </Menus.Menu>
-
+            <Open opens="edit">
+              <button>
+                <HiPencil />
+              </button>
+            </Open>
             <Window name="edit">
               <CreateCabinForm cabinToEdit={cabin} />
             </Window>
 
+            <Open opens="delete">
+              <button>
+                {/* {isDeleting ? "deleting..." : "delete"} */}
+                <HiTrash />
+              </button>
+            </Open>
             <Window name="delete">
               <ConfirmDelete
                 resourceName={name}
@@ -123,6 +118,16 @@ function CabinRow({ cabin }) {
               />
             </Window>
           </Modal>
+          <Menus.Menu>
+            <Menus.Toggle id={cabinId} />
+            <Menus.List id={cabinId}>
+              <Menus.Button icon={<HiSquare2Stack />} onClick={handleDuplicate}>
+                Duplicate
+              </Menus.Button>
+              <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+              <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+            </Menus.List>
+          </Menus.Menu>
         </div>
       </Table.Row>
     </>
